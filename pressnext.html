@@ -1,0 +1,153 @@
+<html>
+<head>
+<title>PressNext</title>
+<style>
+* {
+    font-family: Georgia, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
+
+.background {
+    position: absolute;
+    top: 0; left: 0;
+    background: #F7F7F9;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.background > div {
+    text-align: center;
+    font-size: 15rem;
+    color: #fff;
+    text-shadow: 0 3px 0 #eee;
+}
+.background > div.sub {
+    font-size: 3rem;
+}
+
+.modal {
+    background: #FFF;
+    position: relative;
+    top: auto;
+    z-index: 0;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3rem;
+    max-width: 500px;
+    margin: 18rem auto 0;
+}
+.modal > div {
+    padding: 1rem;
+}
+.modal > .modal-header {
+    border-bottom: 1px solid rgba(0,0,0,.2);
+    overflow: hidden;
+}
+.modal > .modal-header > .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: .5rem 1rem;
+}
+.modal > .modal-footer {
+    border-top: 1px solid rgba(0,0,0,.2);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+button {
+    display: inline-block;
+    border: 0;
+    line-height: 1.25;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    padding: .5rem 1rem;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+button.primary {
+    color: #fff;
+    background-color: #0275d8;
+}
+button.close {
+    float: right;
+    background-color: transparent;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    cursor: default;
+}
+button.disable {
+    opacity: .4;
+    text-shadow: 0 1px 0 #fff;
+    cursor: default;
+}
+</style>
+<script>
+    var levels = [
+        {
+            "title": "Press \"Next\" to continue.",
+            "message": ["Welcome, I will be your guide.","Press \"next\" to go to the next level."]
+        },
+        {
+            "title": "Successful.",
+            "message": ["Congratulations on the completion of the project.","Press \"next\" to go to the next level."]
+        }
+    ];
+
+    var d_title;
+    var d_content;
+    var d_next;
+    var d_level;
+
+    function load_level(number) {
+        var level = levels[number];
+
+        d_level.innerText = number;
+        d_title.innerText = level.title;
+        d_content.innerHTML = "<p>" + level.message.join('</p><p>'); + "</p>";
+    }
+    
+    function init() {
+        var counter_level = 0;
+
+        d_title = document.getElementById('title');
+        d_content = document.getElementById('content');
+        d_next = document.getElementById('next');
+        d_level = document.getElementById('level');
+
+        load_level(counter_level);
+
+        d_next.addEventListener("click", function(event) {
+            counter_level++;
+
+            load_level(counter_level);
+        }, false);
+    }
+</script>
+</head>
+<body onload="init()">
+  <div class="background">
+     <div>Level <span id="level">0</span></div>
+     <div class="sub">Chapitre 1</div>
+  </div>
+  <div class="modal">
+    <div class="modal-header">
+        <button id="close" class="close disable">×</button>
+        <div id="title" class="title"></div>
+    </div>
+    <div class="modal-content" id="content"></div>
+    <div class="modal-footer">
+        <button id="next" class="primary">NEXT</button>
+    </div>
+  </div>
+</body>
+</html>
