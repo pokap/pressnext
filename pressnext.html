@@ -41,7 +41,9 @@
     border: 1px solid rgba(0,0,0,.2);
     border-radius: .3rem;
     max-width: 500px;
-    margin: 18rem auto 0;
+    margin: auto;
+    margin-top: 50vh;
+    transform: translateY(-50%);
 
     visibility: visible;
     opacity: 1;
@@ -102,6 +104,24 @@ button.disable {
 }
 </style>
 <script>
+    var chapiters = [
+        {
+            "last_level_number": 2,
+        },
+        {
+            "last_level_number": 3,
+        },
+        {
+            "last_level_number": 11,
+            "__initialize": function (context) {
+                context.background.style.background = '#00131D';
+            },
+            "__finish": function (context) {
+                context.background.style.background = null;
+            }
+        }
+    ];
+
     var levels = [
         {
             "title": "Press \"Next\" to continue.",
@@ -112,23 +132,21 @@ button.disable {
             "message": ["Congratulations on the completion of the project.","Press \"next\" to go to the next level."]
         },
         {
-            "title": "Ending",
-            "message": ["The end."],
-            "__initialize": function (context) {
-                context.background.style.background = 'blue';
-            },
-            "__finish": function (context) {
-                context.background.style.background = null;
-            }
+            "title": "Chapitre 2",
+            "message": ["Yeee now chapitre, you did it."],
         },
         {
-            "title": "Lol",
-            "message": ["Loooooooooooolololololololoolo bitch"],
+            "title": "Chapitre 3 - Let's try something",
+            "message": ["We will test your reflexes.","&nbsp;","Les't GO, GO GO GO Press \"next\" to go to the next level."],
+        },
+        {
+            "title": "Press \"next\" to go to the next level.",
+            "message": ["Press \"next\" to go to the next level."],
             "__initialize": function (context) {
                 var maxXPosition = 30;
                 var minXPosition = -30;
 
-                var speed = 4;
+                var speed = 2;
                 var position = 0;
 
                 pn_start_animate(function () {
@@ -148,8 +166,12 @@ button.disable {
             }
         },
         {
-            "title": "Lol",
-            "message": ["Loooooooooooolololololololoolo bitch"],
+            "title": "New level",
+            "message": ["Try something else, more difficult, slightly faster."],
+        },
+        {
+            "title": "Press \"next\" to go to the next level.",
+            "message": ["Press \"next\" to go to the next level."],
             "__initialize": function (context) {
                 var maxYPosition = 30;
                 var minYPosition = -30;
@@ -174,8 +196,12 @@ button.disable {
             }
         },
         {
-            "title": "Lol",
-            "message": ["Loooooooooooolololololololoolo bitch"],
+            "title": "Very nice",
+            "message": ["Now the 2 together."],
+        },
+        {
+            "title": "Press \"next\" to go to the next level.",
+            "message": ["Press \"next\" to go to the next level."],
             "__initialize": function (context) {
                 var maxXPosition = 200;
                 var minXPosition = -200;
@@ -206,10 +232,20 @@ button.disable {
 
                 context.modal.style.left = null;
             }
+        },
+        {
+            "title": "Oh jeez!",
+            "message": ["&nbsp;","&nbsp;","I play a better game.","&nbsp;","&nbsp;"]
+        },
+        {
+            "title": "Ending",
+            "message": ["The end."]
         }
     ];
 
-    var counter_level = 0;
+    var previous_level = levels.length;
+    var current_level = 1;
+    var current_chapiter = 1;
     var in_transition = false;
 
     var d_background;
@@ -218,6 +254,7 @@ button.disable {
     var d_content;
     var d_next;
     var d_level;
+    var d_chapiter;
 
     var context = {};
 
@@ -235,8 +272,29 @@ button.disable {
         window.cancelAnimationFrame(context.data._anime);
     }
 
-    function close_level(number) {
-        var level = levels[number];
+    function _close_chapiter(chapiter_index) {
+console.log("close chapiter");
+        var chapiter = chapiters[chapiter_index];
+
+        if (chapiter.hasOwnProperty('__finish')) {
+            chapiter.__finish(context);
+        }
+    }
+
+    function _load_chapiter(chapiter_index) {
+console.log("load chapiter");
+        var chapiter = chapiters[chapiter_index];
+
+        if (chapiter.hasOwnProperty('__initialize')) {
+            chapiter.__initialize(context);
+        }
+
+        d_chapiter.innerText = chapiter_index + 1;
+    }
+
+    function _close_level(level_index) {
+console.log("close level");
+        var level = levels[level_index];
 
         if (level.hasOwnProperty('__finish')) {
             level.__finish(context);
@@ -246,29 +304,124 @@ button.disable {
         context.data = {};
     }
 
-    function load_level(number) {
-        var level = levels[number];
+    function _load_level(level_index) {
+console.log("load level");
+        var level = levels[level_index];
 
         if (level.hasOwnProperty('__initialize')) {
             level.__initialize(context);
         }
 
-        d_level.innerText = number;
+        d_level.innerText = level_index + 1;
         d_title.innerText = level.title;
         d_content.innerHTML = '<p>' + level.message.join('</p><p>') + '</p>';
     }
 
-    function next() {
-        if (in_transition || d_next.classList.contains("disable")) {
+    function _manage_level(previous_level_number, new_level_number) {
+        if (!in_transition) {
             return;
         }
 
-        counter_level++;
+        var previous_chapiter_number = search_chapiter(previous_level_number);
+
+        current_chapiter = search_chapiter(new_level_number);
+
+        _close_level(previous_level_number - 1);
+
+        if (previous_chapiter_number !== current_chapiter) {
+            _close_chapiter(previous_chapiter_number - 1);
+            _load_chapiter(current_chapiter - 1);
+        }
+
+        _load_level(new_level_number - 1);
+
+        d_modal.classList.remove("transition");
+        in_transition = false;
+    }
+
+    function selection_level(level_number) {
+console.log("selection level");
+        if (level_number > levels.length || level_number < 0) {
+            throw "No such level.";
+        }
+
+        if (in_transition) {
+            return;
+        }
+
+        previous_level = current_level;
+        current_level = level_number;
 
         d_modal.classList.add("transition");
         in_transition = true;
     }
 
+    function prev() {
+console.log("prev");
+        if (in_transition) {
+            return;
+        }
+
+        if (current_level <= 1) {
+            current_level = 1;
+
+            selection_level(levels.length);
+        } else {
+            selection_level(current_level - 1);
+        }
+    }
+
+    function next() {
+console.log("next");
+        if (in_transition) {
+            return;
+        }
+
+        if (current_level >= levels.length) {
+            current_level = levels.length;
+
+            selection_level(1);
+        } else {
+            selection_level(current_level + 1);
+        }
+    }
+
+    function search_chapiter(level_number) {
+        for (var i = chapiters.length; i > 0; i--) {
+            if (level_number > chapiters[i - 1].last_level_number) {
+                return i + 1;
+            } 
+        }
+
+        return 1;
+    }
+
+/**
+    function selection_level(level_number) {
+        if (level_number > levels.length) {
+            throw "No such level.";
+        }
+
+        _close_level(current_level);
+
+        current_level = level_number;
+
+        _close_chapiter(current_chapiter - 1);
+
+        current_chapiter = 1;
+        for (var i = chapiters.length; i > 0; i--) {
+            if (level_number > chapiters[i - 1].last_level_number) {
+                current_chapiter = i;
+                break;
+            } 
+        }
+
+        _load_chapiter(current_chapiter - 1);
+
+        d_modal.classList.add("transition");
+        in_transition = true;
+    }
+*/
     function init() {
         d_background = document.getElementById('background');
         d_modal = document.getElementById('modal');
@@ -276,6 +429,7 @@ button.disable {
         d_content = document.getElementById('content');
         d_next = document.getElementById('next');
         d_level = document.getElementById('level');
+        d_chapiter = document.getElementById('chapiter');
 
         context = {
             "data": {},
@@ -285,33 +439,25 @@ button.disable {
         };
 
         d_modal.addEventListener("transitionend", function (event) {
-            if (!in_transition) {
+            _manage_level(previous_level, current_level);
+        }, false);
+
+        d_next.addEventListener("click", function (evt) {
+            if (d_next.classList.contains("disable")) {
                 return;
             }
 
-            close_level(counter_level - 1);
-
-            if (counter_level >= levels.length) {
-                counter_level = 0;
-            }
-
-            load_level(counter_level);
-
-            d_modal.classList.remove("transition");
-
-            in_transition = false;
+            next();
         }, false);
 
-        d_next.addEventListener("click", next, false);
-
-        load_level(counter_level);
+        _load_level(current_level - 1);
     }
 </script>
 </head>
 <body onload="init()">
   <div class="background" id="background">
      <div>Level <span id="level">0</span></div>
-     <div class="sub">Chapitre 1</div>
+     <div class="sub">Chapiter <span id="chapiter">1</span></div>
   </div>
   <div class="modal" id="modal">
     <div class="modal-header">
