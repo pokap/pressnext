@@ -114,15 +114,102 @@ button.disable {
         {
             "title": "Ending",
             "message": ["The end."],
-            "background": function (background) {
-                background.doc.style.background = 'blue';
+            "__initialize": function (context) {
+                context.background.style.background = 'blue';
             },
-            "footer": function (footer) {
-                footer.next.remove();
+            "__finish": function (context) {
+                context.background.style.background = null;
+            }
+        },
+        {
+            "title": "Lol",
+            "message": ["Loooooooooooolololololololoolo bitch"],
+            "__initialize": function (context) {
+                var maxXPosition = 30;
+                var minXPosition = -30;
+
+                var speed = 4;
+                var position = 0;
+
+                pn_start_animate(function () {
+                    position = position + speed;
+
+                    if (position > maxXPosition || position < minXPosition) {
+                        speed = speed * (-1);
+                    }
+
+                    context.modal.style.left = position + 'px';
+                });
+            },
+            "__finish": function (context) {
+                pn_stop_animate();
+
+                context.modal.style.left = null;
+            }
+        },
+        {
+            "title": "Lol",
+            "message": ["Loooooooooooolololololololoolo bitch"],
+            "__initialize": function (context) {
+                var maxYPosition = 30;
+                var minYPosition = -30;
+
+                var speed = 4;
+                var position = 0;
+
+                pn_start_animate(function () {
+                    position = position + speed;
+
+                    if (position > maxYPosition || position < minYPosition) {
+                        speed = speed * (-1);
+                    }
+
+                    context.modal.style.top = position + 'px';
+                });
+            },
+            "__finish": function (context) {
+                pn_stop_animate();
+
+                context.modal.style.top = null;
+            }
+        },
+        {
+            "title": "Lol",
+            "message": ["Loooooooooooolololololololoolo bitch"],
+            "__initialize": function (context) {
+                var maxXPosition = 200;
+                var minXPosition = -200;
+                var maxYPosition = 50;
+                var minYPosition = -50;
+
+                var speedX = 4, speedY = 4;
+                var positionX = 0;
+                var positionY = 0;
+
+                pn_start_animate(function () {
+                    positionX = positionX + speedX;
+                    positionY = positionY + speedY;
+
+                    if (positionX > maxXPosition || positionX < minXPosition) {
+                        speedX = speedX * (-1);
+                    }
+                    if (positionY > maxYPosition || positionY < minYPosition) {
+                        speedY = speedY * (-1);
+                    }
+
+                    context.modal.style.left = positionX + 'px';
+                    context.modal.style.top = positionY + 'px';
+                });
+            },
+            "__finish": function (context) {
+                pn_stop_animate();
+
+                context.modal.style.left = null;
             }
         }
     ];
 
+    var counter_level = 0;
     var in_transition = false;
 
     var d_background;
@@ -132,15 +219,38 @@ button.disable {
     var d_next;
     var d_level;
 
+    var context = {};
+
+    function pn_start_animate(callback) {
+        var tick = function (timestamp) {
+            callback();
+
+            context.data._anime = window.requestAnimationFrame(tick);
+        };
+
+        context.data._anime = window.requestAnimationFrame(tick);
+    }
+
+    function pn_stop_animate() {
+        window.cancelAnimationFrame(context.data._anime);
+    }
+
+    function close_level(number) {
+        var level = levels[number];
+
+        if (level.hasOwnProperty('__finish')) {
+            level.__finish(context);
+        }
+
+        // clear
+        context.data = {};
+    }
+
     function load_level(number) {
         var level = levels[number];
 
-        if (level.hasOwnProperty('background')) {
-            level.background({ "doc": d_background });
-        }
-
-        if (level.hasOwnProperty('footer')) {
-            level.footer({ "next": d_next });
+        if (level.hasOwnProperty('__initialize')) {
+            level.__initialize(context);
         }
 
         d_level.innerText = number;
@@ -148,9 +258,18 @@ button.disable {
         d_content.innerHTML = '<p>' + level.message.join('</p><p>') + '</p>';
     }
 
-    function init() {
-        var counter_level = 0;
+    function next() {
+        if (in_transition || d_next.classList.contains("disable")) {
+            return;
+        }
 
+        counter_level++;
+
+        d_modal.classList.add("transition");
+        in_transition = true;
+    }
+
+    function init() {
         d_background = document.getElementById('background');
         d_modal = document.getElementById('modal');
         d_title = document.getElementById('title');
@@ -158,28 +277,34 @@ button.disable {
         d_next = document.getElementById('next');
         d_level = document.getElementById('level');
 
+        context = {
+            "data": {},
+            "background": d_background,
+            "next": d_next,
+            "modal": d_modal
+        };
+
         d_modal.addEventListener("transitionend", function (event) {
-            if (in_transition) {
-                load_level(counter_level);
-
-                d_modal.classList.remove("transition");
-
-                in_transition = false;
-            }
-        }, false);
-
-        load_level(counter_level);
-
-        d_next.addEventListener("click", function (event) {
-            if (in_transition) {
+            if (!in_transition) {
                 return;
             }
 
-            counter_level++;
+            close_level(counter_level - 1);
 
-            d_modal.classList.add("transition");
-            in_transition = true;
+            if (counter_level >= levels.length) {
+                counter_level = 0;
+            }
+
+            load_level(counter_level);
+
+            d_modal.classList.remove("transition");
+
+            in_transition = false;
         }, false);
+
+        d_next.addEventListener("click", next, false);
+
+        load_level(counter_level);
     }
 </script>
 </head>
