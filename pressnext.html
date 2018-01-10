@@ -110,11 +110,22 @@ button.disable {
         {
             "title": "Successful.",
             "message": ["Congratulations on the completion of the project.","Press \"next\" to go to the next level."]
+        },
+        {
+            "title": "Ending",
+            "message": ["The end."],
+            "background": function (background) {
+                background.doc.style.background = 'blue';
+            },
+            "footer": function (footer) {
+                footer.next.remove();
+            }
         }
     ];
 
     var in_transition = false;
 
+    var d_background;
     var d_modal;
     var d_title;
     var d_content;
@@ -124,6 +135,14 @@ button.disable {
     function load_level(number) {
         var level = levels[number];
 
+        if (level.hasOwnProperty('background')) {
+            level.background({ "doc": d_background });
+        }
+
+        if (level.hasOwnProperty('footer')) {
+            level.footer({ "next": d_next });
+        }
+
         d_level.innerText = number;
         d_title.innerText = level.title;
         d_content.innerHTML = '<p>' + level.message.join('</p><p>') + '</p>';
@@ -132,6 +151,7 @@ button.disable {
     function init() {
         var counter_level = 0;
 
+        d_background = document.getElementById('background');
         d_modal = document.getElementById('modal');
         d_title = document.getElementById('title');
         d_content = document.getElementById('content');
@@ -164,7 +184,7 @@ button.disable {
 </script>
 </head>
 <body onload="init()">
-  <div class="background">
+  <div class="background" id="background">
      <div>Level <span id="level">0</span></div>
      <div class="sub">Chapitre 1</div>
   </div>
