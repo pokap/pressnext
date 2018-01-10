@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8" />
 <title>PressNext</title>
 <style>
 * {
@@ -40,6 +42,15 @@
     border-radius: .3rem;
     max-width: 500px;
     margin: 18rem auto 0;
+
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s linear;
+}
+.modal.transition {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 1s, opacity 1s linear;
 }
 .modal > div {
     padding: 1rem;
@@ -61,7 +72,6 @@
 }
 button {
     display: inline-block;
-    border: 0;
     line-height: 1.25;
     text-align: center;
     white-space: nowrap;
@@ -103,6 +113,9 @@ button.disable {
         }
     ];
 
+    var in_transition = false;
+
+    var d_modal;
     var d_title;
     var d_content;
     var d_next;
@@ -113,23 +126,39 @@ button.disable {
 
         d_level.innerText = number;
         d_title.innerText = level.title;
-        d_content.innerHTML = "<p>" + level.message.join('</p><p>'); + "</p>";
+        d_content.innerHTML = '<p>' + level.message.join('</p><p>') + '</p>';
     }
-    
+
     function init() {
         var counter_level = 0;
 
+        d_modal = document.getElementById('modal');
         d_title = document.getElementById('title');
         d_content = document.getElementById('content');
         d_next = document.getElementById('next');
         d_level = document.getElementById('level');
 
+        d_modal.addEventListener("transitionend", function (event) {
+            if (in_transition) {
+                load_level(counter_level);
+
+                d_modal.classList.remove("transition");
+
+                in_transition = false;
+            }
+        }, false);
+
         load_level(counter_level);
 
-        d_next.addEventListener("click", function(event) {
+        d_next.addEventListener("click", function (event) {
+            if (in_transition) {
+                return;
+            }
+
             counter_level++;
 
-            load_level(counter_level);
+            d_modal.classList.add("transition");
+            in_transition = true;
         }, false);
     }
 </script>
@@ -139,9 +168,9 @@ button.disable {
      <div>Level <span id="level">0</span></div>
      <div class="sub">Chapitre 1</div>
   </div>
-  <div class="modal">
+  <div class="modal" id="modal">
     <div class="modal-header">
-        <button id="close" class="close disable">×</button>
+        <button id="close" class="close disable">&times;</button>
         <div id="title" class="title"></div>
     </div>
     <div class="modal-content" id="content"></div>

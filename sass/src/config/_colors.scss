@@ -1,0 +1,76 @@
+/**
+ * Color definition
+ */
+
+// base colors
+// @note: all base colors have a 50% lightness so they match the medium lightness variant.
+$color-standard:          hsl(0, 0%, 50%) !default;
+$color-action:            hsl(203, 100%, 50%) !default; // historically S48%
+$color-alert:             hsl(0, 80%, 50%) !default;    // historically S48%
+$color-warning:           hsl(28, 100%, 50%) !default;  // historically S47%
+$color-success:           hsl(116, 43%, 50%) !default;  // historically S45%
+
+// BC aliases
+$color-primary:           $color-action !default;
+$color-secondary:         $color-standard !default; // historically S48%
+
+// 13 variants to lighten/darken colors,
+// +13 variants in inverted (that use a 15-100 base instead of a 0-100)
+$color-lightness: (
+        "top":      100%,
+        "high5":     95%,
+        "high4":     90%,
+        "high3":     85%,
+        "high2":     70%,
+        "high1":     60%,
+        "medium":    50%,
+        "low1":      40%,
+        "low2":      30%,
+        "low3":      15%,
+        "low4":      10%,
+        "low5":       5%,
+        "bottom":     0%,
+        "i_top":     15%,
+        "i_high5":   19%,
+        "i_high4":   22%,
+        "i_high3":   26%,
+        "i_high2":   36%,
+        "i_high1":   43%,
+        "i_medium":  50%,
+        "i_low1":    60%,
+        "i_low2":    70%,
+        "i_low3":    85%,
+        "i_low4":    90%,
+        "i_low5":    95%,
+        "i_bottom": 100%,
+);
+
+// 4 levels of opacity on light background
+$color-opacity: (
+        "high_opacity":     0.87,
+        "medium_opacity":   0.54,
+        "low_opacity":      0.38,
+        "bottom_opacity":   0.05,
+) !default;
+
+// 4 levels of opacity on dark background
+$color-inverted-opacity: (
+        "high_opacity":       1.00,
+        "medium_opacity":     0.70,
+        "low_opacity":        0.50,
+        "bottom_opacity":     0.05,
+) !default;
+
+// variant function to easily apply a color opacity
+@function color_opacity($color, $opacity, $map: $color-opacity) {
+  @return rgba($color,  map_get($map, $opacity));
+}
+
+// variant function to easily apply a color variant
+@function color_variant($color, $variant, $opacity: null) {
+  @if ($opacity != null) {
+    @return color_opacity(change_color($color, $lightness: map_get($color-lightness, $variant)), $opacity);
+  } @else {
+    @return change_color($color, $lightness: map_get($color-lightness, $variant))
+  }
+}
