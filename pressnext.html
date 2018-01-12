@@ -26,7 +26,7 @@
     text-align: center;
     font-size: 15rem;
     color: #fff;
-    text-shadow: 0 3px 0 #eee;
+    text-shadow: 0 2px 0 #aaa;
 }
 .background > div.sub {
     font-size: 3rem;
@@ -107,12 +107,12 @@ button.disable {
 }
 </style>
 <script>
-    var chapiters = [
+    var chapters = [
         {
-            "last_level_number": 2,
+            "last_level_number": 2
         },
         {
-            "last_level_number": 3,
+            "last_level_number": 3
         },
         {
             "last_level_number": 11,
@@ -136,11 +136,11 @@ button.disable {
         },
         {
             "title": "Chapitre 2",
-            "message": ["Yeee now chapitre, you did it."],
+            "message": ["Yeee now chapitre, you did it."]
         },
         {
             "title": "Chapitre 3 - Let's try something",
-            "message": ["We will test your reflexes.","&nbsp;","Les't GO, GO GO GO Press \"next\" to go to the next level."],
+            "message": ["We will test your reflexes.","&nbsp;","Les't GO, GO GO GO Press \"next\" to go to the next level."]
         },
         {
             "title": "Press \"next\" to go to the next level.",
@@ -265,7 +265,7 @@ button.disable {
 
     var previous_level = levels.length;
     var current_level = 1;
-    var current_chapiter = 1;
+    var current_chapter = 1;
     var in_transition = false;
 
     var d_background;
@@ -274,7 +274,7 @@ button.disable {
     var d_content;
     var d_next;
     var d_level;
-    var d_chapiter;
+    var d_chapter;
 
     var context = {};
 
@@ -292,24 +292,24 @@ button.disable {
         window.cancelAnimationFrame(context.data._anime);
     }
 
-    function _close_chapiter(chapiter_index) {
-console.log("close chapiter");
-        var chapiter = chapiters[chapiter_index];
+    function _close_chapter(chapter_index) {
+console.log("close chapter");
+        var chapter = chapters[chapter_index];
 
-        if (chapiter.hasOwnProperty('__finish')) {
-            chapiter.__finish(context);
+        if (chapter.hasOwnProperty('__finish')) {
+            chapter.__finish(context);
         }
     }
 
-    function _load_chapiter(chapiter_index) {
-console.log("load chapiter");
-        var chapiter = chapiters[chapiter_index];
+    function _load_chapter(chapter_index) {
+console.log("load chapter");
+        var chapter = chapters[chapter_index];
 
-        if (chapiter.hasOwnProperty('__initialize')) {
-            chapiter.__initialize(context);
+        if (chapter.hasOwnProperty('__initialize')) {
+            chapter.__initialize(context);
         }
 
-        d_chapiter.innerText = chapiter_index + 1;
+        d_chapter.innerText = chapter_index + 1;
     }
 
     function _close_level(level_index) {
@@ -342,15 +342,15 @@ console.log("load level");
             return;
         }
 
-        var previous_chapiter_number = search_chapiter(previous_level_number);
+        var previous_chapter_number = search_chapter(previous_level_number);
 
-        current_chapiter = search_chapiter(new_level_number);
+        current_chapter = search_chapter(new_level_number);
 
         _close_level(previous_level_number - 1);
 
-        if (previous_chapiter_number !== current_chapiter) {
-            _close_chapiter(previous_chapiter_number - 1);
-            _load_chapiter(current_chapiter - 1);
+        if (previous_chapter_number !== current_chapter) {
+            _close_chapter(previous_chapter_number - 1);
+            _load_chapter(current_chapter - 1);
         }
 
         _load_level(new_level_number - 1);
@@ -406,9 +406,9 @@ console.log("next");
         }
     }
 
-    function search_chapiter(level_number) {
-        for (var i = chapiters.length; i > 0; i--) {
-            if (level_number > chapiters[i - 1].last_level_number) {
+    function search_chapter(level_number) {
+        for (var i = chapters.length; i > 0; i--) {
+            if (level_number > chapters[i - 1].last_level_number) {
                 return i + 1;
             } 
         }
@@ -416,32 +416,6 @@ console.log("next");
         return 1;
     }
 
-/**
-    function selection_level(level_number) {
-        if (level_number > levels.length) {
-            throw "No such level.";
-        }
-
-        _close_level(current_level);
-
-        current_level = level_number;
-
-        _close_chapiter(current_chapiter - 1);
-
-        current_chapiter = 1;
-        for (var i = chapiters.length; i > 0; i--) {
-            if (level_number > chapiters[i - 1].last_level_number) {
-                current_chapiter = i;
-                break;
-            } 
-        }
-
-        _load_chapiter(current_chapiter - 1);
-
-        d_modal.classList.add("transition");
-        in_transition = true;
-    }
-*/
     function init() {
         d_background = document.getElementById('background');
         d_modal = document.getElementById('modal');
@@ -449,7 +423,7 @@ console.log("next");
         d_content = document.getElementById('content');
         d_next = document.getElementById('next');
         d_level = document.getElementById('level');
-        d_chapiter = document.getElementById('chapiter');
+        d_chapter = document.getElementById('chapter');
 
         context = {
             "data": {},
@@ -477,7 +451,7 @@ console.log("next");
 <body onload="init()">
   <div class="background" id="background">
      <div>Level <span id="level">0</span></div>
-     <div class="sub">Chapiter <span id="chapiter">1</span></div>
+     <div class="sub">Chapter <span id="chapter">1</span></div>
   </div>
   <div class="modal" id="modal">
     <div class="modal-header">
