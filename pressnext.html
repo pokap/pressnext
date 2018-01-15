@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <title>PressNext</title>
 <style>
+/**
+ * https://soundcloud.com/oceanicpiano/sets/creative-commons-music-for-commercial-use
+ */
 * {
     font-family: Georgia, sans-serif;
     margin: 0;
@@ -112,12 +115,18 @@ button.disable {
             "last_level_number": 2
         },
         {
-            "last_level_number": 3
-        },
-        {
-            "last_level_number": 11,
+            "last_level_number": 8,
             "__initialize": function (context) {
                 context.background.style.background = '#00131D';
+            },
+            "__finish": function (context) {
+                context.background.style.background = null;
+            }
+        },
+        {
+            "last_level_number": 10,
+            "__initialize": function (context) {
+                context.background.style.background = '#333';
             },
             "__finish": function (context) {
                 context.background.style.background = null;
@@ -135,12 +144,8 @@ button.disable {
             "message": ["Congratulations on the completion of the project.","Press \"next\" to go to the next level."]
         },
         {
-            "title": "Chapitre 2",
-            "message": ["Yeee now chapitre, you did it."]
-        },
-        {
-            "title": "Chapitre 3 - Let's try something",
-            "message": ["We will test your reflexes.","&nbsp;","Les't GO, GO GO GO Press \"next\" to go to the next level."]
+            "title": "Let's try something",
+            "message": ["Chapitre 2","&nbsp;","We will test your reflexes.","&nbsp;","Les't GO, GO GO GO Press \"next\" to go to the next level."]
         },
         {
             "title": "Press \"next\" to go to the next level.",
@@ -252,8 +257,6 @@ button.disable {
                 context.next.classList.remove("primary");
 
                 context.data.d_prev = context.next.parentNode.appendChild(button);
-                
-                console.log(context.data.d_prev);
             },
             "__finish": function (context) {
                 context.data.d_prev.remove();
@@ -355,6 +358,7 @@ console.log("load level");
 
         _load_level(new_level_number - 1);
 
+        d_next.blur();
         d_modal.classList.remove("transition");
         in_transition = false;
     }
@@ -425,6 +429,12 @@ console.log("next");
         d_level = document.getElementById('level');
         d_chapter = document.getElementById('chapter');
 
+        (function () {
+            var snd = document.getElementById('sound_background');
+            snd.play();
+            snd.volume = 0.5;
+        })();
+
         context = {
             "data": {},
             "background": d_background,
@@ -440,6 +450,9 @@ console.log("next");
             if (d_next.classList.contains("disable")) {
                 return;
             }
+            
+            var snd = new Audio("button.ogg");
+            snd.play();
 
             next();
         }, false);
@@ -449,6 +462,7 @@ console.log("next");
 </script>
 </head>
 <body onload="init()">
+  <audio id="sound_background" src="background.ogg" type="audio/ogg"></audio>
   <div class="background" id="background">
      <div>Level <span id="level">0</span></div>
      <div class="sub">Chapter <span id="chapter">1</span></div>
