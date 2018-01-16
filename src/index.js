@@ -1,121 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>PressNext</title>
-<style>
-* {
-    font-family: Georgia, sans-serif;
-    margin: 0;
-    padding: 0;
-    line-height: 1.5;
-}
-
-.background {
-    position: absolute;
-    top: 0; left: 0;
-    background: #F7F7F9;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    text-align: center;
-    text-shadow: 0 2px 0 #aaa;
-    color: #fff;
-}
-.background > div {
-    font-size: 4rem;
-    line-height: 1;
-}
-.background > div.sub {
-    font-size: 3rem;
-}
-.background > div > h1 {
-    font-size: 5rem;
-    line-height: 1;
-}
-.background > div > h2 {
-    line-height: 1;
-}
-
-.modal {
-    background: #FFF;
-    position: relative;
-    top: auto;
-    z-index: 0;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.2);
-    border-radius: .3rem;
-    max-width: 500px;
-    margin: auto;
-    margin-top: 50vh;
-    transform: translateY(-50%);
-
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 1s linear;
-}
-.modal.transition {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s 1s, opacity 1s linear;
-}
-.modal > .modal-header {
-    padding: 1rem;
-    border-bottom: 1px solid rgba(0,0,0,.2);
-    overflow: hidden;
-}
-.modal > .modal-header > .title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin: .5rem 1rem;
-}
-.modal > .modal-content {
-    padding: 1rem;
-}
-.modal > .modal-footer {
-    padding: 1rem .5rem;
-    border-top: 1px solid rgba(0,0,0,.2);
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-}
-button {
-    display: inline-block;
-    line-height: 1.25;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    border: 1px solid transparent;
-    padding: .5rem 1rem;
-    margin: 0 .5rem;
-    border-radius: .25rem;
-    cursor: pointer;
-}
-button.primary {
-    color: #fff;
-    background-color: #0275d8;
-}
-button.close {
-    float: right;
-    background-color: transparent;
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1;
-    color: #000;
-    text-shadow: 0 1px 0 #fff;
-    cursor: default;
-}
-button.disable {
-    opacity: .4;
-    text-shadow: 0 1px 0 #fff;
-    cursor: default;
-}
-</style>
-<script>
+;(function () {
     var chapters = [
         {
             "last_level_number": 2
@@ -302,7 +185,7 @@ button.disable {
     }
 
     function _close_chapter(chapter_index) {
-console.log("close chapter");
+        console.log("close chapter");
         var chapter = chapters[chapter_index];
 
         if (chapter.hasOwnProperty('__finish')) {
@@ -311,7 +194,7 @@ console.log("close chapter");
     }
 
     function _load_chapter(chapter_index) {
-console.log("load chapter");
+        console.log("load chapter");
         var chapter = chapters[chapter_index];
 
         if (chapter.hasOwnProperty('__initialize')) {
@@ -322,7 +205,7 @@ console.log("load chapter");
     }
 
     function _close_level(level_index) {
-console.log("close level");
+        console.log("close level");
         var level = levels[level_index];
 
         if (level.hasOwnProperty('__finish')) {
@@ -334,7 +217,7 @@ console.log("close level");
     }
 
     function _load_level(level_index) {
-console.log("load level");
+        console.log("load level");
         var level = levels[level_index];
 
         if (level.hasOwnProperty('__initialize')) {
@@ -370,7 +253,7 @@ console.log("load level");
     }
 
     function selection_level(level_number) {
-console.log("selection level");
+        console.log("selection level");
         if (level_number > levels.length || level_number < 1) {
             throw "No such level.";
         }
@@ -387,7 +270,7 @@ console.log("selection level");
     }
 
     function prev() {
-console.log("prev");
+        console.log("prev");
         if (in_transition) {
             return;
         }
@@ -402,7 +285,7 @@ console.log("prev");
     }
 
     function next() {
-console.log("next");
+        console.log("next");
         if (in_transition) {
             return;
         }
@@ -420,7 +303,7 @@ console.log("next");
         for (var i = chapters.length; i > 0; i--) {
             if (level_number > chapters[i - 1].last_level_number) {
                 return i + 1;
-            } 
+            }
         }
 
         return 1;
@@ -450,33 +333,14 @@ console.log("next");
             if (d_next.classList.contains("disable")) {
                 return;
             }
-            
-            (new Audio("button.ogg")).play();
+
+            (new Audio("../button.ogg")).play();
 
             next();
         }, false);
 
         _load_level(0);
     }
-</script>
-</head>
-<body onload="init()">
-  <div class="background" id="background">
-    <div>
-      <h1>PressNext</h1>
-      <h2>Level <span id="level">0</span></h2>
-    </div>
-    <div class="sub">Chapter <span id="chapter">1</span></div>
-  </div>
-  <div class="modal" id="modal">
-    <div class="modal-header">
-        <button id="close" class="close disable">&times;</button>
-        <div id="title" class="title"></div>
-    </div>
-    <div class="modal-content" id="content"></div>
-    <div class="modal-footer">
-        <button id="next" class="primary">NEXT</button>
-    </div>
-  </div>
-</body>
-</html>
+
+    document.addEventListener("DOMContentLoaded", init);
+})();
