@@ -4,9 +4,6 @@
 <meta charset="UTF-8" />
 <title>PressNext</title>
 <style>
-/**
- * https://soundcloud.com/oceanicpiano/sets/creative-commons-music-for-commercial-use
- */
 * {
     font-family: Georgia, sans-serif;
     margin: 0;
@@ -24,15 +21,24 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    text-align: center;
+    text-shadow: 0 2px 0 #aaa;
+    color: #fff;
 }
 .background > div {
-    text-align: center;
-    font-size: 15rem;
-    color: #fff;
-    text-shadow: 0 2px 0 #aaa;
+    font-size: 4rem;
+    line-height: 1;
 }
 .background > div.sub {
     font-size: 3rem;
+}
+.background > div > h1 {
+    font-size: 5rem;
+    line-height: 1;
+}
+.background > div > h2 {
+    line-height: 1;
 }
 
 .modal {
@@ -429,12 +435,6 @@ console.log("next");
         d_level = document.getElementById('level');
         d_chapter = document.getElementById('chapter');
 
-        (function () {
-            var snd = document.getElementById('sound_background');
-            snd.play();
-            snd.volume = 0.5;
-        })();
-
         context = {
             "data": {},
             "background": d_background,
@@ -451,21 +451,22 @@ console.log("next");
                 return;
             }
             
-            var snd = new Audio("button.ogg");
-            snd.play();
+            (new Audio("button.ogg")).play();
 
             next();
         }, false);
 
-        _load_level(current_level - 1);
+        _load_level(0);
     }
 </script>
 </head>
 <body onload="init()">
-  <audio id="sound_background" src="background.ogg" type="audio/ogg"></audio>
   <div class="background" id="background">
-     <div>Level <span id="level">0</span></div>
-     <div class="sub">Chapter <span id="chapter">1</span></div>
+    <div>
+      <h1>PressNext</h1>
+      <h2>Level <span id="level">0</span></h2>
+    </div>
+    <div class="sub">Chapter <span id="chapter">1</span></div>
   </div>
   <div class="modal" id="modal">
     <div class="modal-header">
