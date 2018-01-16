@@ -141,7 +141,7 @@
                 var button = document.createElement("button");
                 button.innerText = 'BACK';
                 button.className = 'primary';
-                button.addEventListener("click", prev, false);
+                button.addEventListener("click", function () { pn_prev_suite(2); }, false);
 
                 context.next.classList.remove("primary");
 
@@ -158,6 +158,7 @@
     var previous_level = levels.length;
     var current_level = 1;
     var current_chapter = 1;
+    var current_callback;
     var in_transition = false;
 
     var d_background;
@@ -179,22 +180,41 @@
 
         context.data._anime = window.requestAnimationFrame(tick);
     }
-
     function pn_stop_animate() {
         window.cancelAnimationFrame(context.data._anime);
     }
+    function pn_next_suite(time) {
+        if (time === 0) {
+            return;
+        }
 
+        next(function () { pn_next_suite(time - 1) });
+    }
+    function pn_prev_suite(time) {
+        if (time === 0) {
+            return;
+        }
+
+        prev(function () { pn_prev_suite(time - 1); });
+    }
+
+    function _debug(message) {
+        var now = new Date();
+        var date = [now.getFullYear(),now.getMonth(),now.getDate()].join('-');
+        var time = [now.getHours(),now.getMinutes(),now.getSeconds(),now.getMilliseconds()].join(':');
+
+        console.log('['+date+'T'+time+'] '+message);
+    }
     function _close_chapter(chapter_index) {
-        console.log("close chapter");
+_debug("close chapter n°"+(chapter_index + 1));
         var chapter = chapters[chapter_index];
 
         if (chapter.hasOwnProperty('__finish')) {
             chapter.__finish(context);
         }
     }
-
     function _load_chapter(chapter_index) {
-        console.log("load chapter");
+_debug("load chapter n°"+(chapter_index + 1));
         var chapter = chapters[chapter_index];
 
         if (chapter.hasOwnProperty('__initialize')) {
@@ -203,9 +223,8 @@
 
         d_chapter.innerText = chapter_index + 1;
     }
-
     function _close_level(level_index) {
-        console.log("close level");
+_debug("close level n°"+(level_index + 1));
         var level = levels[level_index];
 
         if (level.hasOwnProperty('__finish')) {
@@ -215,9 +234,8 @@
         // clear
         context.data = {};
     }
-
     function _load_level(level_index) {
-        console.log("load level");
+_debug("load level n°"+(level_index + 1));
         var level = levels[level_index];
 
         if (level.hasOwnProperty('__initialize')) {
@@ -228,7 +246,6 @@
         d_title.innerText = level.title;
         d_content.innerHTML = '<p>' + level.message.join('</p><p>') + '</p>';
     }
-
     function _manage_level(previous_level_number, new_level_number) {
         if (!in_transition) {
             return;
@@ -252,8 +269,8 @@
         in_transition = false;
     }
 
-    function selection_level(level_number) {
-        console.log("selection level");
+    function selection_level(level_number, callback) {
+_debug("selection level n°"+level_number);
         if (level_number > levels.length || level_number < 1) {
             throw "No such level.";
         }
@@ -264,13 +281,14 @@
 
         previous_level = current_level;
         current_level = level_number;
+        current_callback = callback;
 
         d_modal.classList.add("transition");
         in_transition = true;
     }
 
-    function prev() {
-        console.log("prev");
+    function prev(callback) {
+_debug("prev");
         if (in_transition) {
             return;
         }
@@ -278,14 +296,14 @@
         if (current_level <= 1) {
             current_level = 1;
 
-            selection_level(levels.length);
+            selection_level(levels.length, callback);
         } else {
-            selection_level(current_level - 1);
+            selection_level(current_level - 1, callback);
         }
     }
 
-    function next() {
-        console.log("next");
+    function next(callback) {
+_debug("next");
         if (in_transition) {
             return;
         }
@@ -293,9 +311,9 @@
         if (current_level >= levels.length) {
             current_level = levels.length;
 
-            selection_level(1);
+            selection_level(1, callback);
         } else {
-            selection_level(current_level + 1);
+            selection_level(current_level + 1, callback);
         }
     }
 
@@ -325,8 +343,18 @@
             "modal": d_modal
         };
 
-        d_modal.addEventListener("transitionend", function (event) {
-            _manage_level(previous_level, current_level);
+        d_modal.addEventListener("transitionend", function (evt) {
+            if (evt.propertyName !== 'opacity') {
+                return;
+            }
+
+            if (in_transition) {
+                _manage_level(previous_level, current_level);
+            } else {
+                if (!!current_callback) {
+                    current_callback();
+                }
+            }
         }, false);
 
         d_next.addEventListener("click", function (evt) {
@@ -343,4 +371,10 @@
     }
 
     document.addEventListener("DOMContentLoaded", init);
+    
+    window._debug_game = {
+        selection_level: selection_level,
+        prev: prev,
+        next: next
+    };
 })();
