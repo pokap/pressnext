@@ -1,0 +1,38 @@
+/**
+ * Includes all elements
+ */
+
+button {
+  display: inline-block;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  padding: .5rem 1rem;
+  margin: 0 .5rem;
+  border-radius: .25rem;
+  cursor: pointer;
+
+  &.primary {
+    color: #fff;
+    background-color: #0275d8;
+  }
+
+  &.close {
+    float: right;
+    background-color: transparent;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    cursor: default;
+  }
+
+  &.disable {
+    opacity: .4;
+    text-shadow: 0 1px 0 #fff;
+    cursor: default;
+  }
+}

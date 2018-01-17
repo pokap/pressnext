@@ -1,34 +1,34 @@
-const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+
+const extractSass = new ExtractTextPlugin({
+    filename: 'build/style.css',
+    allChunks: true
+});
 
 module.exports = {
-    entry: './src/index.js',
+    entry: ['./src/index.js','./sass/src/pressnext.scss'],
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'build')
-    }
+        filename: 'build/bundle.js'
+    },
+    module: {
+        rules: [{
+            test: /\.scss$/,
+            use: extractSass.extract({
+                use: [{
+                    loader: "css-loader"
+                }, {
+                    loader: "sass-loader"
+                }],
+                // use style-loader in development
+                fallback: "style-loader"
+            })
+        }]
+    },
+    plugins: [
+        extractSass,
+        new webpack.LoaderOptionsPlugin({
+            minimize: true
+        })
+    ]
 };
-
-// module.exports = {
-//     entry: 'js/',
-//     output: {
-//         filename: 'game.js',
-//         path: path.resolve(__dirname, 'build')
-//     },
-//     module: {
-//         rules: [{
-//             test: /\.scss$/,
-//             use: [{
-//                 loader: "style-loader" // creates style nodes from JS strings
-//             }, {
-//                 loader: "css-loader" // translates CSS into CommonJS
-//             }, {
-//                 loader: "sass-loader", // compiles Sass to CSS
-//                 options: {
-//                     includePaths: [ 'sass/' ],
-//                     outputStyle: 'compressed',
-//                     outFile: 'build/style.css'
-//                 }
-//             }]
-//         }]
-//     }
-// };

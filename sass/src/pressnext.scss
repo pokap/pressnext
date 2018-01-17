@@ -1,5 +1,7 @@
 // Make sure th e charset is set appropriately
 @charset "UTF-8";
 
+@import "../../node_modules/normalize.css/normalize.css";
+
 @import "config/all";
 @import "component/all";
