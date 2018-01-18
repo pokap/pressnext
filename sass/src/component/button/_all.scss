@@ -14,9 +14,20 @@ button {
   border-radius: .25rem;
   cursor: pointer;
 
+  &:focus {
+    outline: 0;
+  }
+
   &.primary {
     color: #fff;
     background-color: #0275d8;
+
+    &:hover {
+      background-color: #0296FF;
+    }
+    &:active {
+      background-color: #025282;
+    }
   }
 
   &.close {
@@ -27,12 +38,22 @@ button {
     line-height: 1;
     color: #000;
     text-shadow: 0 1px 0 #fff;
-    cursor: default;
+
+    &:hover {
+      background-color: #E2E2E2;
+    }
+    &:active {
+      background-color: #BABABA;
+    }
   }
 
   &.disable {
     opacity: .4;
     text-shadow: 0 1px 0 #fff;
     cursor: default;
+
+    &:hover {
+      background-color: inherit;
+    }
   }
 }

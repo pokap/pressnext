@@ -1,3 +1,18 @@
+/**
+ * TODO:
+ *
+ *  - Adds counter level
+ *  - Improve API
+ *  - Adds metric:
+ *      - Time the game
+ *      - Count "next"
+ *      - Number of level not found (percent)
+ *  - Adds story:
+ *      - Maybe 4 chapters
+ *      - Adds a sub-game:
+ *          - More levels/chapters
+ *          - Enigmas
+ */
 ;(function () {
     var chapters = [
         {
@@ -13,7 +28,7 @@
             }
         },
         {
-            "last_level_number": 10,
+            "last_level_number": 11,
             "__initialize": function (context) {
                 context.background.style.background = '#333';
             },
@@ -135,13 +150,37 @@
             "message": ["&nbsp;","&nbsp;","I play a better game.","&nbsp;","&nbsp;"]
         },
         {
+            "title": "Click X",
+            "message": ["OMG CLICK X for next level."],
+            "__initialize": function (context) {
+                context.data.xnext = function () { pn_next_suite(1); };
+
+                context.next.classList.add('disable');
+
+                context.close.classList.remove('disable');
+                context.close.addEventListener("click", context.data.xnext, false);
+
+                document.querySelector('h1').innerText = 'ClickX';
+                document.querySelector('title').innerText = 'ClickX';
+            },
+            "__finish": function (context) {
+                context.close.removeEventListener("click", context.data.xnext);
+
+                context.next.classList.remove('disable');
+                context.close.classList.add('disable');
+
+                document.querySelector('h1').innerText = 'PressNext';
+                document.querySelector('title').innerText = 'PressNext';
+            }
+        },
+        {
             "title": "Ending",
             "message": ["The end."],
             "__initialize": function (context) {
                 var button = document.createElement("button");
                 button.innerText = 'BACK';
                 button.className = 'primary';
-                button.addEventListener("click", function () { pn_prev_suite(2); }, false);
+                button.addEventListener("click", function () { pn_prev_suite(1); }, false);
 
                 context.next.classList.remove("primary");
 
@@ -168,6 +207,7 @@
     var d_next;
     var d_level;
     var d_chapter;
+    var d_close;
 
     var context = {};
 
@@ -264,7 +304,6 @@ _debug("load level n°"+(level_index + 1));
 
         _load_level(new_level_number - 1);
 
-        d_next.blur();
         d_modal.classList.remove("transition");
         in_transition = false;
     }
@@ -335,12 +374,14 @@ _debug("next");
         d_next = document.getElementById('next');
         d_level = document.getElementById('level');
         d_chapter = document.getElementById('chapter');
+        d_close = document.getElementById('close');
 
         context = {
             "data": {},
             "background": d_background,
             "next": d_next,
-            "modal": d_modal
+            "modal": d_modal,
+            "close": d_close
         };
 
         d_modal.addEventListener("transitionend", function (evt) {

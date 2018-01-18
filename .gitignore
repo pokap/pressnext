@@ -1,2 +1,4 @@
+build/bundle.js
+build/style.css
 node_modules
 npm-debug.log
