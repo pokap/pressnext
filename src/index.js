@@ -184,18 +184,18 @@
         window.cancelAnimationFrame(context.data._anime);
     }
     function pn_next_suite(time) {
-        if (time === 0) {
-            return;
+        if (time === 1) {
+            next();
+        } else {
+            next(function () { pn_next_suite(time - 1) });
         }
-
-        next(function () { pn_next_suite(time - 1) });
     }
     function pn_prev_suite(time) {
-        if (time === 0) {
-            return;
+        if (time === 1) {
+            prev();
+        } else {
+            prev(function () { pn_prev_suite(time - 1); });
         }
-
-        prev(function () { pn_prev_suite(time - 1); });
     }
 
     function _debug(message) {
