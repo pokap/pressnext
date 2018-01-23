@@ -28,6 +28,8 @@ import chapters from 'data_chapter';
  *      - Adds a sub-game:
  *          - More levels/chapters
  *          - Enigmas
+ *              - Faire un jeu simon préderterminé, si c'est fini plus vite que prévu faire un message troll
+ *              - 
  */
 
 let d_background;
