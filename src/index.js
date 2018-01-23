@@ -18,18 +18,53 @@ import chapters from 'data_chapter';
  * TODO:
  *
  *  - Adds counter level
+ *      - Pouvoir afficher autre chose à la place du level
  *  - Improve API
  *  - Adds metric:
  *      - Time the game
  *      - Count "next"
  *      - Number of level not found (percent)
  *  - Adds story:
- *      - Maybe 4 chapters
+ *      - Chapters
+ *          - Didactiel
+ *              - intro + reflexe
+ *          - Petite histoire
+ *              - c'est une IA (la fenêtre), une rescapée d'un guerre qu'il y a eu entre une colonni humaine et une autre armé humain
+ *              - "En fait on va faire un autre histoire"
+ *              - c'est l'histoire d'un cowboy qui donne une lettre à une cowboy elle ne dit rien et demande "Qu'est ce que cela veut dire ?" <- faire un son google
+ *                  - qu'est ce que vous faite ?
+ *              - elle s'approche de vous mais vous ne pouvez pas réagir vos yeux plongé dans les siens.
+ *                  - qu'est ce que vous faite ?
+ *              - sauvegarde .. (fake, c'est le flag-du-cycle)
+ *              - elle prend son arme et le braque sur vous.
+ *                  - qu'est ce que vous faite ?
+ *              - sont arme à la main, ces yeux dans les votres vous sentez la fin proche.
+ *                  - (on peut cliquer sur le "button close" pour éviter le game-over)
+ *                  - qu'est ce que vous faite ?
+ *              - elle vous tire dessus un grand tire (bruit) qui vous faits tomber du cheval, votre vie prend fin avant même de toucher le sol.
+ *                  - Game over. (Reprise à la dernière sauvegarde flag-du-cycle)
+ *              - "Bon si vous ne voulez pas jouer à mes histoires on faire autre chose."
+ *          - 
  *      - Adds a sub-game:
- *          - More levels/chapters
- *          - Enigmas
- *              - Faire un jeu simon préderterminé, si c'est fini plus vite que prévu faire un message troll
- *              - 
+ *          - Faire un jeu simon prélocalisé, si c'est fini plus vite que prévu faire un message troll
+ *          - Faire un compte-à-rebours (sinon prev) avec le next qui s'affiche au dernier moment (on peut clické dessus avant) prélocalisé.
+ *          - Plusieurs level dans lequel il faut trouvé une suite d'object pour avoir la clé du dernier next
+ *              - Level 1
+ *                  - une première armoire bleu fermé qui contient la clé final
+ *                  - une seconde armoire marron contient un clé jaune
+ *              - Level 2
+ *                  - un coffre fermé jaune contient un clé verte
+ *              - Level 3
+ *                  - chapitre sous-sol
+ *                  - Level 3-1
+ *                      - une status verte
+ *                  - Level 3-2
+ *                  - Level 3-3
+ *                      - une trape noir fermé qui renvoie faire un autre niveau
+ *              - Level 4
+ *                  - une horloge de bureau (bruit)
+ *                  - le bouton next est grisé (désactivé mais non disable) avec la sérure
+ *          - 
  */
 
 let d_background;

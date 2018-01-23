@@ -11,9 +11,11 @@
 
 export default [
     {
+        "name": "1",
         "last_level_number": 2
     },
     {
+        "name": "2",
         "last_level_number": 8,
         "__initialize": (context) => {
             context.background.style.background = '#00131D';
@@ -23,6 +25,7 @@ export default [
         }
     },
     {
+        "name": "3",
         "last_level_number": 11,
         "__initialize": (context) => {
             context.background.style.background = '#333';
