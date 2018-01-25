@@ -9,7 +9,7 @@
 
 'use strict';
 
-import { engine } from 'engine';
+import { engine } from './engine';
 
 let tool = {};
 

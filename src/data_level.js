@@ -9,7 +9,7 @@
 
 'use strict';
 
-const tool = require('tool');
+import { tool } from './tool';
 
 export default [
     {
@@ -45,7 +45,7 @@ export default [
             });
         },
         "__finish": (context) => {
-            tool.stop_animate();
+            tool.stop_animate(context);
 
             context.modal.style.left = null;
         }
@@ -75,7 +75,7 @@ export default [
             });
         },
         "__finish": (context) => {
-            tool.stop_animate();
+            tool.stop_animate(context);
 
             context.modal.style.top = null;
         }
@@ -113,7 +113,7 @@ export default [
             });
         },
         "__finish": (context) => {
-            tool.stop_animate();
+            tool.stop_animate(context);
 
             context.modal.style.left = null;
         }

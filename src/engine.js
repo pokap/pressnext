@@ -9,7 +9,7 @@
 
 'use strict';
 
-import { logger } from 'logger';
+import { logger } from './logger';
 
 let engine = {};
 
@@ -30,7 +30,7 @@ engine.d_level = null;
 engine.d_chapter = null;
 
 engine.init = function (levels, chapters) {
-    this.levels = chapters;
+    this.levels = levels;
     this.chapters = chapters;
 
     this.previous_level = levels.length;
@@ -54,7 +54,7 @@ engine.load_chapter = function (chapter_index) {
     let chapter = this.chapters[chapter_index];
 
     if (chapter.hasOwnProperty('__initialize')) {
-        chapter.__initialize(context);
+        chapter.__initialize(this.context);
     }
 
     this.d_chapter.innerText = chapter_index + 1;
@@ -79,7 +79,7 @@ engine.load_level = function (level_index) {
     let level = this.levels[level_index];
 
     if (level.hasOwnProperty('__initialize')) {
-        level.__initialize(context);
+        level.__initialize(this.context);
     }
 
     this.d_level.innerText = level_index + 1;

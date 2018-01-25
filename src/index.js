@@ -9,10 +9,10 @@
 
 'use strict';
 
-import { engine } from 'engine';
+import { engine } from './engine';
 
-import levels from 'data_level';
-import chapters from 'data_chapter';
+import levels from './data_level';
+import chapters from './data_chapter';
 
 /**
  * TODO:
