@@ -33,19 +33,19 @@ import chapters from './data_chapter';
  *              - "En fait on va faire un autre histoire"
  *              - Nouvel histoire : Vous être un cowboy et vous allez à la rencontre d'une cowboy pour lui donner une lettre.
  *                  - (boite de dialogue, ce qu'on y écrit est dit au prochain level, mettre le message "get schwifty" pour un autre chapitre)
- * (1)      - Vous lui dites ____ en lui donnant lettre, après avoir lu la lettre elle vous demande "Qu'est ce que cela veut dire ?" <- faire un son google, pas besoin de décompte
- *                  - qu'est ce que vous faite ?
- *              - elle s'approche de vous mais vous ne pouvez pas réagir vos yeux plongé dans les siens.
- *                  - qu'est ce que vous faite ?
- *              - sauvegarde .. (fake, c'est le flag-du-cycle)
- *              - elle prend son arme et le braque sur vous.
- *                  - qu'est ce que vous faite ?
- *              - sont arme à la main, ces yeux dans les votres vous sentez la fin proche.
- *                  - (on peut cliquer sur le "button close" pour éviter le game-over)
- *                  - qu'est ce que vous faite ?
- *              - elle vous tire dessus un grand tire (bruit) qui vous faits tomber du cheval, votre vie prend fin avant même de toucher le sol.
- *                  - Game over. (Reprise à la dernière sauvegarde flag-du-cycle)
- *              - "Bon si vous ne voulez pas jouer à mes histoires on faire autre chose."
+ * (1)          - Vous lui dites ____ en lui donnant lettre, après avoir lu la lettre elle vous demande "Qu'est ce que cela veut dire ?" <- faire un son google, pas besoin de décompte
+ *  /               - qu'est ce que vous faite ?
+ *  /           - elle s'approche de vous mais vous ne pouvez pas réagir vos yeux plongé dans les siens.
+ *  /               - qu'est ce que vous faite ?
+ *  /           - sauvegarde .. (fake, c'est le flag-du-cycle)
+ *  /           - elle prend son arme et le braque sur vous.
+ *  /               - qu'est ce que vous faite ?
+ *  /           - sont arme à la main, ces yeux dans les votres vous sentez la fin proche.
+ *  /               - (on peut cliquer sur le "button close" pour éviter le game-over)
+ *  /               - qu'est ce que vous faite ?
+ *  /           - elle vous tire dessus un grand tire (bruit) qui vous faits tomber du cheval, votre vie prend fin avant même de toucher le sol.
+ *  /               - Game over. (Reprise à la dernière sauvegarde flag-du-cycle)
+ *  /           - "Bon si vous ne voulez pas jouer à mes histoires on faire autre chose."
  *          - Dernier chapitre:
  *              - Faire un jeu simon prélocalisé, si c'est fini plus vite que prévu faire un message troll
  *              - Faire un compte-à-rebours (sinon prev) avec le next qui s'affiche au dernier moment (on peut clické dessus avant) prélocalisé.
@@ -76,9 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            (new Audio("../button.ogg")).play();
+            (new Audio("../sound/button.ogg")).play();
 
-            engine.next();
+            if (!!context.next.dataset.level) {
+                engine.selectionLevel(parseInt(context.next.dataset.level));
+                delete context.next.dataset.level;
+            } else {
+                engine.next();
+            }
         }, false);
 
         context.modal.addEventListener("transitionend", (evt) => {

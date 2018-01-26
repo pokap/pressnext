@@ -12,21 +12,11 @@
 export default [
     {
         "name": "1",
-        "last_level_number": 2
+        "last_level_number": 8
     },
     {
         "name": "2",
-        "last_level_number": 8,
-        "__initialize": (context) => {
-            context.background.style.background = '#00131D';
-        },
-        "__finish": (context) => {
-            context.background.style.background = null;
-        }
-    },
-    {
-        "name": "3",
-        "last_level_number": 11,
+        "last_level_number": 17,
         "__initialize": (context) => {
             context.background.style.background = '#333';
         },

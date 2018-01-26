@@ -43,4 +43,8 @@ tool.prevSuite = (time) => {
     }
 };
 
+tool.selectionLevel = (level, callback) => {
+    engine.selectionLevel(level, callback)
+};
+
 export { tool };

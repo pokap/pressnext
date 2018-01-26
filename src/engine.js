@@ -49,7 +49,8 @@ let loadChapter = (chapterIndex, context) => {
         chapter.__initialize(context);
     }
 
-    context.chapter.innerText = chapterIndex + 1;
+    context.chapter.innerText = chapter.name;
+    context.data = {};
 };
 
 let closeLevel = (levelIndex, context) => {
@@ -60,15 +61,13 @@ let closeLevel = (levelIndex, context) => {
     if (level.hasOwnProperty('__finish')) {
         level.__finish(context);
     }
-
-    // clear
-    context.data = {};
 };
 
 let loadLevel = (levelIndex, context) => {
     logger.debug("load level n°"+(levelIndex + 1));
 
     let level = levels[levelIndex];
+    let message;
 
     if (level.hasOwnProperty('__initialize')) {
         level.__initialize(context);
@@ -76,7 +75,14 @@ let loadLevel = (levelIndex, context) => {
 
     context.level.innerText = levelIndex + 1;
     context.title.innerText = level.title;
-    context.content.innerHTML = '<p>' + level.message.join('</p><p>') + '</p>';
+
+    if (typeof level.message === 'function') {
+        message = level.message(context);
+    } else {
+        message = level.message;
+    }
+
+    context.content.innerHTML = '<p>' + message.join('</p><p>') + '</p>';
 };
 
 let manageLevel = (previousLevelNumber, newLevelNumber, context) => {
