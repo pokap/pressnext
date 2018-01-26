@@ -34,7 +34,7 @@ export default [
             let speed = 2;
             let position = 0;
 
-            tool.start_animate(context, () => {
+            tool.startAnimate(context, () => {
                 position = position + speed;
 
                 if (position > maxXPosition || position < minXPosition) {
@@ -45,7 +45,7 @@ export default [
             });
         },
         "__finish": (context) => {
-            tool.stop_animate(context);
+            tool.stopAnimate(context);
 
             context.modal.style.left = null;
         }
@@ -64,7 +64,7 @@ export default [
             let speed = 4;
             let position = 0;
 
-            tool.start_animate(context, () => {
+            tool.startAnimate(context, () => {
                 position = position + speed;
 
                 if (position > maxYPosition || position < minYPosition) {
@@ -75,7 +75,7 @@ export default [
             });
         },
         "__finish": (context) => {
-            tool.stop_animate(context);
+            tool.stopAnimate(context);
 
             context.modal.style.top = null;
         }
@@ -97,7 +97,7 @@ export default [
             let positionX = 0;
             let positionY = 0;
 
-            tool.start_animate(context, () => {
+            tool.startAnimate(context, () => {
                 positionX = positionX + speedX;
                 positionY = positionY + speedY;
 
@@ -113,7 +113,7 @@ export default [
             });
         },
         "__finish": (context) => {
-            tool.stop_animate(context);
+            tool.stopAnimate(context);
 
             context.modal.style.left = null;
         }
@@ -126,7 +126,7 @@ export default [
         "title": "Click X",
         "message": ["OMG CLICK X for next level."],
         "__initialize": (context) => {
-            context.data.xnext = () => { tool.next_suite(1); };
+            context.data.xnext = () => { tool.nextSuite(1); };
 
             context.next.classList.add('disable');
 
@@ -153,7 +153,7 @@ export default [
             let button = document.createElement("button");
             button.innerText = 'BACK';
             button.className = 'primary';
-            button.addEventListener("click", () => { tool.prev_suite(1); }, false);
+            button.addEventListener("click", () => { tool.prevSuite(1); }, false);
 
             context.next.classList.remove("primary");
 

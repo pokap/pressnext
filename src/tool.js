@@ -13,7 +13,7 @@ import { engine } from './engine';
 
 let tool = {};
 
-tool.start_animate = (context, callback) => {
+tool.startAnimate = (context, callback) => {
     let tick = (timestamp) => {
         callback();
 
@@ -23,23 +23,23 @@ tool.start_animate = (context, callback) => {
     context.data._anime = window.requestAnimationFrame(tick);
 };
 
-tool.stop_animate = (context) => {
+tool.stopAnimate = (context) => {
     window.cancelAnimationFrame(context.data._anime);
 };
 
-tool.next_suite = (time) => {
+tool.nextSuite = (time) => {
     if (time === 1) {
         engine.next();
     } else {
-        engine.next(() => { tool.next_suite(time - 1) });
+        engine.next(() => { tool.nextSuite(time - 1) });
     }
 };
 
-tool.prev_suite = (time) => {
+tool.prevSuite = (time) => {
     if (time === 1) {
         engine.prev();
     } else {
-        engine.prev(() => { tool.prev_suite(time - 1); });
+        engine.prev(() => { tool.prevSuite(time - 1); });
     }
 };
 

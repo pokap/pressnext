@@ -69,58 +69,26 @@ import chapters from './data_chapter';
  *          - Fin (recommencer, crédit passage rapide, mettre à la fin "vous pouviez lui dire "get schwifty"" sur (1))
  */
 
-let d_background;
-let d_next;
-let d_close;
-
 document.addEventListener("DOMContentLoaded", () => {
-    d_background = document.getElementById('background');
-    d_next = document.getElementById('next');
-    d_close = document.getElementById('close');
-
-    engine.d_modal = document.getElementById('modal');
-    engine.d_title = document.getElementById('title');
-    engine.d_content = document.getElementById('content');
-    engine.d_level = document.getElementById('level');
-    engine.d_chapter = document.getElementById('chapter');
-
-    engine.context = {
-        "data": {},
-        "background": d_background,
-        "next": d_next,
-        "modal": engine.d_modal,
-        "close": d_close
-    };
-
-    d_next.addEventListener("click", (evt) => {
-        if (d_next.classList.contains("disable")) {
-            return;
-        }
-
-        (new Audio("../button.ogg")).play();
-
-        engine.next();
-    }, false);
-
-    engine.d_modal.addEventListener("transitionend", (evt) => {
-        if (evt.propertyName !== 'opacity') {
-            return;
-        }
-
-        if (engine.in_transition) {
-            engine.manage_level(engine.previous_level, engine.current_level);
-        } else {
-            if (!!engine.current_callback) {
-                engine.current_callback();
+    engine.init(levels, chapters, (context) => {
+        context.next.addEventListener("click", (evt) => {
+            if (context.next.classList.contains("disable")) {
+                return;
             }
-        }
-    }, false);
 
-    engine.init(levels, chapters);
+            (new Audio("../button.ogg")).play();
+
+            engine.next();
+        }, false);
+
+        context.modal.addEventListener("transitionend", (evt) => {
+            if (evt.propertyName !== 'opacity') {
+                return;
+            }
+
+            engine.rockerLevel();
+        }, false);
+    });
 });
 
-window.debug_game = {
-    selection_level: engine.selection_level,
-    prev: engine.prev,
-    next: engine.next
-};
+window.debugGame = engine;
