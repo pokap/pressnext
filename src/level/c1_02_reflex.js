@@ -26,7 +26,7 @@ export default [
             let speed = 2;
             let position = 0;
 
-            tool.startAnimate(context, () => {
+            tool.startAnimate(context, (context) => {
                 position = position + speed;
 
                 if (position > maxXPosition || position < minXPosition) {
@@ -56,7 +56,7 @@ export default [
             let speed = 4;
             let position = 0;
 
-            tool.startAnimate(context, () => {
+            tool.startAnimate(context, (context) => {
                 position = position + speed;
 
                 if (position > maxYPosition || position < minYPosition) {
@@ -89,7 +89,7 @@ export default [
             let positionX = 0;
             let positionY = 0;
 
-            tool.startAnimate(context, () => {
+            tool.startAnimate(context, (context) => {
                 positionX = positionX + speedX;
                 positionY = positionY + speedY;
 

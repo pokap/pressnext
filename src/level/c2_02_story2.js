@@ -11,13 +11,24 @@
 
 import { tool } from './../tool';
 
+function button_shoot_her() {
+    let shoot = document.createElement("button");
+    shoot.innerText = 'Shoot her';
+    shoot.disabled = true;
+
+    return shoot;
+}
+
 export default [
     {
         "title": "New story",
         "message": ["<i>You are a cowboy and you meet a cowboy to give him a letter.</i>"],
         "__initialize": (context) => {
+            tool.fadeMessages(context);
+
             let input = document.createElement("input");
             input.type = 'text';
+            input.value = 'hmmm';
 
             context.data.input = context.next.parentNode.insertBefore(input, context.next);
         },
@@ -37,6 +48,8 @@ export default [
             ];
         },
         "__initialize": (context) => {
+            tool.fadeMessages(context);
+
             (new Audio("../sound/whatdoesthatmean.ogg")).play();
         }
     },
@@ -44,7 +57,16 @@ export default [
         "title": "The letter of everything",
         "message":[
             "<i>She approaches you but you can not react your eyes immersed in hers.</i>"
-        ]
+        ],
+        "__initialize": (context) => {
+            tool.fadeMessages(context);
+
+            context.data.shoot = context.next.parentNode.insertBefore(button_shoot_her(), context.next);
+        },
+        "__finish": (context) => {
+            context.data.shoot.remove();
+            context.data.input = null;
+        }
     },
     {
         "title": "Quick save...",
@@ -54,7 +76,16 @@ export default [
         "title": "The letter of everything",
         "message": [
             "<i>She takes her weapon and points it at you.</i>"
-        ]
+        ],
+        "__initialize": (context) => {
+            tool.fadeMessages(context);
+
+            context.data.shoot = context.next.parentNode.insertBefore(button_shoot_her(), context.next);
+        },
+        "__finish": (context) => {
+            context.data.shoot.remove();
+            context.data.input = null;
+        }
     },
     {
         "title": "The letter of everything",
@@ -62,13 +93,17 @@ export default [
             "<i>Her weapon in his hand, those eyes in yours you feel the near end.</i>"
         ],
         "__initialize": (context) => {
-            context.data.xnext = () => { tool.selectionLevel(17); };
+            tool.fadeMessages(context);
+
+            context.data.xnext = () => { tool.selectionLevel(19); };
 
             context.close.classList.remove('disable');
             context.close.addEventListener("click", context.data.xnext, false);
 
             document.querySelector('h1').innerText = 'ClickX';
             document.querySelector('title').innerText = 'ClickX';
+
+            context.data.shoot = context.next.parentNode.insertBefore(button_shoot_her(), context.next);
         },
         "__finish": (context) => {
             context.close.removeEventListener("click", context.data.xnext);
@@ -76,6 +111,9 @@ export default [
 
             document.querySelector('h1').innerText = 'PressNext';
             document.querySelector('title').innerText = 'PressNext';
+
+            context.data.shoot.remove();
+            context.data.input = null;
         }
     },
     {
@@ -86,12 +124,14 @@ export default [
             "<i>Your life ends before you even touch the ground.</i>"
         ],
         "__initialize": (context) => {
+            tool.fadeMessages(context);
+
             (new Audio("../sound/winchestershot.ogg")).play();
         }
     },
     {
-        "title": "You are dead",
-        "message": ["Game over."],
+        "title": "Game over.",
+        "message": ["You are dead."],
         "__initialize": (context) => {
             context.next.dataset.level = '12';
         }

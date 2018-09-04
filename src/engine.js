@@ -69,10 +69,6 @@ let loadLevel = (levelIndex, context) => {
     let level = levels[levelIndex];
     let message;
 
-    if (level.hasOwnProperty('__initialize')) {
-        level.__initialize(context);
-    }
-
     context.level.innerText = levelIndex + 1;
     context.title.innerText = level.title;
 
@@ -83,6 +79,10 @@ let loadLevel = (levelIndex, context) => {
     }
 
     context.content.innerHTML = '<p>' + message.join('</p><p>') + '</p>';
+
+    if (level.hasOwnProperty('__initialize')) {
+        level.__initialize(context);
+    }
 };
 
 let manageLevel = (previousLevelNumber, newLevelNumber, context) => {
@@ -107,7 +107,7 @@ let engine = {};
 engine.inTransition = false;
 engine.context = {};
 
-engine.init = function (_levels, _chapters, callback) {
+engine.init = (_levels, _chapters, callback) => {
     let docById = (id) => document.getElementById(id);
 
     levels = _levels;
@@ -144,7 +144,7 @@ engine.rockerLevel = () => {
     }
 };
 
-engine.selectionLevel = function (levelNumber, callback) {
+engine.selectionLevel = (levelNumber, callback) => {
     logger.debug("selection level n°"+levelNumber);
 
     if (levelNumber > levels.length || levelNumber < 1) {
@@ -163,7 +163,7 @@ engine.selectionLevel = function (levelNumber, callback) {
     engine.context.modal.classList.add("transition");
 };
 
-engine.prev = function (callback) {
+engine.prev = (callback) => {
     logger.debug("prev");
 
     if (engine.inTransition) {
@@ -179,7 +179,7 @@ engine.prev = function (callback) {
     }
 };
 
-engine.next = function (callback) {
+engine.next = (callback) => {
     logger.debug("next");
 
     if (engine.inTransition) {

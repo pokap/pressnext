@@ -11,11 +11,13 @@
 
 import c1_01_intro from './level/c1_01_intro';
 import c1_02_reflex from './level/c1_02_reflex';
+import c2_01_story1 from './level/c2_01_story1';
 import c2_02_story2 from './level/c2_02_story2';
 
 export default []
     .concat(c1_01_intro)
     .concat(c1_02_reflex)
+    .concat(c2_01_story1)
     .concat(c2_02_story2)
 ;
 

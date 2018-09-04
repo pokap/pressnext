@@ -15,7 +15,7 @@ let tool = {};
 
 tool.startAnimate = (context, callback) => {
     let tick = (timestamp) => {
-        callback();
+        callback(context);
 
         context.data._anime = window.requestAnimationFrame(tick);
     };
@@ -25,6 +25,40 @@ tool.startAnimate = (context, callback) => {
 
 tool.stopAnimate = (context) => {
     window.cancelAnimationFrame(context.data._anime);
+};
+
+tool.fadeMessages = (context) => {
+    const fade = (element, ms, wait) => {
+        const interval = 60;
+        const gap = interval / ms;
+
+        let opacity = 0,
+            fading;
+
+        const func = () => {
+            wait -= interval;
+
+            if (wait > 0) {
+                return;
+            }
+
+            opacity = opacity + gap;
+            element.style.opacity = opacity.toString();
+
+            if (opacity <= 0 || opacity >= 1) {
+                window.clearInterval(fading);
+            }
+        };
+
+        fading = window.setInterval(func, interval);
+    };
+
+    let counter = 0.5;
+    context.content.querySelectorAll('p').forEach((p) => {
+        p.style.opacity = '0';
+
+        fade(p, 2000, 2000 * counter++);
+    });
 };
 
 tool.nextSuite = (time) => {
